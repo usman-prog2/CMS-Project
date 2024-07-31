@@ -1,8 +1,14 @@
 <h1>Create Post</h1>
-<form action="/admin/posts/create" method="post" >
+<form action="/admin/posts/create" method="post" enctype="multipart/form-data">
 <div class="form-group">
     <label for="title">Title</label><br>
     <input id="title" placeholder="Enter title" name="title" type="text" class="form-control">
+    <br>
+</div>
+
+<div class="form-group">
+    <label for="file">Upload File</label><br>
+    <input id="title" name="file" type="file" class="form-control">
     <br>
 </div>
 

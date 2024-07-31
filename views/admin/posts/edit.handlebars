@@ -8,14 +8,13 @@
 
 <div class="form-group">
     <label for="status">Status</label><br>
-    {{#Select post.status}}
     <select id="status" placeholder="Enter Status of the post" name="status" type="text" class="form-control">
+    {{#Select post.status}}
         <option value="public">Public</option>
         <option value="private">Private</option>
         <option value="draft">Draft</option>
-    </select>
     {{/Select}}
-
+    </select>
     <br>
 </div>
 
