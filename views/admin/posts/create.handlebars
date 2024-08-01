@@ -1,14 +1,20 @@
 <h1>Create Post</h1>
+{{#each errors}}
+<div class="alert alert-danger">
+  {{message}}
+</div>
+  <br>
+{{/each}}
 <form action="/admin/posts/create" method="post" enctype="multipart/form-data">
 <div class="form-group">
     <label for="title">Title</label><br>
-    <input id="title" placeholder="Enter title" name="title" type="text" class="form-control">
+    <input id="title" placeholder="Enter title" name="title" type="text" class="form-control" > 
     <br>
 </div>
 
 <div class="form-group">
     <label for="file">Upload File</label><br>
-    <input id="title" name="file" type="file" class="form-control">
+    <input id="title" name="filename" type="file" class="form-control">
     <br>
 </div>
 
@@ -32,7 +38,7 @@
 
 <div class="form-group">
     <label for="description">Description</label><br>
-    <textarea id="descreption" cols="20" rows="10" placeholder="Enter Description" name="description" class="form-control"></textarea>
+    <textarea id="descreption" cols="20" rows="10" placeholder="Enter Description" name="description" class="form-control" ></textarea>
     <br>
 </div>
     <button type="submit" class="btn btn-primary">Submit</button>

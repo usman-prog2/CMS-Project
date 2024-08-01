@@ -33,64 +33,65 @@ router.get('/edit/:id',(req,res)=>
     })
 })
 
-//creating and saving post in db 
+
+//creating and saving post in db
 router.post('/create',(req,res)=>
     {
-        let filename='';
-        if(!isEmpty(req.files))
+        let errors=[];
+        if(!req.body.title)
         {
-          let file=req.files.file;
-          filename=Date.now()+ "-" +file.name;
-  
-          file.mv("./public/uploads/" + filename,(err)=>
-          {
-              if(err) console.log(err);
-          })
+            errors.push({message:"Please add title"});
+        }
+
+        if(!req.body.allowComments)
+        {
+            errors.push({message:"AllowComments are required"});
+        }
+        
+        if(!req.body.description)
+        {
+            errors.push({message:"Please add description"});
+        }
+
+        if(errors.length>0)
+        {
+            res.render('admin/posts/create',{errors:errors})
+        }
+        else{
+            // let filename='';
+            // if(!isEmpty(req.files))
+            // {
+            //   let file=req.files.file;
+            //   filename=Date.now()+ "-" +file.name;
+            //   file.mv("./public/uploads/" + filename,(err)=>
+            //   {
+            //       if(err) console.log(err);
+            //   })
+            // }
+          //console.log(req.body);
+          const newPost=new posts(
+            req.body
+        );
+          
+          newPost.save().then((post)=>
+        {
+           req.flash('Success_Message',`Post '${post.title}' is saved successfully`);
+           res.redirect('/admin/posts');
+        }).catch((err)=>
+        {
+            res.send('Post is not saved'+err);
+        })
         }
        
-
-      let allowComments=true;
-      if(req.body.allowComments)
-      {
-        allowComments=true;
-      }
-      else
-      {
-        allowComments=false;
-      }
-      const newPost=new posts({ 
-        title: req.body.title,
-        status: req.body.status,
-        allowComments: allowComments,
-        description: req.body.description,
-        file: filename
-    });
-
-      newPost.save().then(()=>
-    {
-       res.redirect('/admin/posts');
-    }).catch((err)=>
-    {
-        res.send('Post is not saved'+err);
-    })
      })
 
  //updating
 router.put('/edit/:id',(req,res)=> {
     posts.findOne({_id:req.params.id}).then((post)=>
-    {
-        if(req.body.allowComments)
-        {
-            allowComments=true;
-        }
-        else
-        {
-            allowComments=false;
-        }
-
+    {   
         post.title=req.body.title;
         post.status=req.body.status;
-        post.allowComments=allowComments
+        post.allowComments=req.body.allowComments;
         post.description=req.body.description;
         post.save().then(()=>
         {

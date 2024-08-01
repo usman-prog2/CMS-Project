@@ -9,6 +9,9 @@ const {allowInsecurePrototypeAccess}=require('@handlebars/allow-prototype-access
 const Handlebars=require('handlebars');
 const upload=require('express-fileupload');
 const {select} =require('./helpers/handlebars-helper.js');
+const session=require('express-session');
+const flash=require('connect-flash');
+
 const port=5000||process.env.port;
 app.use(express.static(path.join(__dirname,'/public')));
 
@@ -28,10 +31,23 @@ app.use(upload());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
+app.use(session({
+    secret:'cmsProject',
+    resave:true,
+    saveUninitialized:true
+}));
+app.use(flash())
+app.use((req,res,next)=>
+{
+    res.locals.Success_Message=req.flash('Success_Message');
+    next();
+})
+
 const HomeRouter=require('./routes/home/homeRoutes');
 const AdminRouter=require('./routes/admin/adminRoutes');
 const PostRouter=require('./routes/admin/posts');
 const { handlebars } = require('hbs');
+const { tr } = require('faker/lib/locales.js');
 app.use(methodOverride('_method'));
 
 

@@ -23,7 +23,7 @@ const postSchema=new schema(
             type:String,
             required:true
         },
-        file:
+        filename:
         {
             type:String
         }

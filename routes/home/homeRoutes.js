@@ -9,6 +9,11 @@ router.all('/*',(req,res,next)=>
     
 router.get('/',(req,res)=>
 {
+    // req.session.usman='Usman Sarwar'
+    // if(req.session.usman)
+    // {
+    //  console.log(`we found ${req.session.usman}`);
+    // }
     res.render("home/index");
 })
     
