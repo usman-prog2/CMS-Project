@@ -23,9 +23,14 @@ const postSchema=new schema(
             type:String,
             required:true
         },
-        filename:
+        file:
         {
             type:String
+        },
+        date:
+        {
+            type:Date,
+            default:Date.now()
         }
     }
 )

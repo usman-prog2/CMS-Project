@@ -58,20 +58,20 @@ router.post('/create',(req,res)=>
             res.render('admin/posts/create',{errors:errors})
         }
         else{
-            // let filename='';
-            // if(!isEmpty(req.files))
-            // {
-            //   let file=req.files.file;
-            //   filename=Date.now()+ "-" +file.name;
-            //   file.mv("./public/uploads/" + filename,(err)=>
-            //   {
-            //       if(err) console.log(err);
-            //   })
-            // }
+            let filename='';
+            if(!isEmpty(req.files))
+            {
+              let file=req.files.file;
+              filename=Date.now()+ "-" +file.name;
+              file.mv("./public/uploads/" + filename,(err)=>
+              {
+                  if(err) console.log(err);
+              })
+            }
+            
           //console.log(req.body);
-          const newPost=new posts(
-            req.body
-        );
+          req.body.file=filename;
+          const newPost=new posts(req.body);
           
           newPost.save().then((post)=>
         {
@@ -87,16 +87,27 @@ router.post('/create',(req,res)=>
 
  //updating
 router.put('/edit/:id',(req,res)=> {
-    posts.findOne({_id:req.params.id}).then((post)=>
-    {   
-        post.title=req.body.title;
-        post.status=req.body.status;
-        post.allowComments=req.body.allowComments;
-        post.description=req.body.description;
-        post.save().then(()=>
-        {
-            res.redirect('/admin/posts');
-        })
+    let filename='';
+    if(!isEmpty(req.files))
+    {
+      let file=req.files.file;
+      filename=Date.now()+ "-" +file.name;
+      file.mv("./public/uploads/" + filename,(err)=>
+      {
+          if(err) console.log(err);
+      })
+    }
+    req.body.file=filename;
+    const id=req.params.id;
+    posts.findByIdAndUpdate(id,{$set:req.body}).
+    then(()=>
+    {
+       req.flash('Success_Message',`Post is updated successfully`);
+       res.redirect('/admin/posts');
+    }).catch(
+    (err)=>
+    {
+        console.log(err); 
     })
 })
 
@@ -104,8 +115,9 @@ router.put('/edit/:id',(req,res)=> {
 router.delete('/:id',(req,res)=>
 {
     posts.deleteOne({_id: req.params.id}).
-    then(()=>
+    then((post)=>
     {
+        req.flash('Success_Message',`Post is deleted successfully`);
         res.redirect('/admin/posts');
     })
 })

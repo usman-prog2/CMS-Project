@@ -8,7 +8,7 @@ const methodOverride=require('method-override');
 const {allowInsecurePrototypeAccess}=require('@handlebars/allow-prototype-access');
 const Handlebars=require('handlebars');
 const upload=require('express-fileupload');
-const {select} =require('./helpers/handlebars-helper.js');
+const {select,generateDate} =require('./helpers/handlebars-helper.js');
 const session=require('express-session');
 const flash=require('connect-flash');
 
@@ -23,7 +23,7 @@ mongoose.connect("mongodb://localhost:27017/cms").then(()=>
     console.log(err);
 })
 
-app.engine('handlebars', engine({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout:'main', helpers:{Select:select}}));
+app.engine('handlebars', engine({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout:'main', helpers:{Select:select,generateDate:generateDate}}));
 app.set('view engine', 'handlebars');
 
 app.use(upload());
@@ -46,14 +46,16 @@ app.use((req,res,next)=>
 const HomeRouter=require('./routes/home/homeRoutes');
 const AdminRouter=require('./routes/admin/adminRoutes');
 const PostRouter=require('./routes/admin/posts');
+const CatagoriesRouter=require('./routes/admin/catagories');
+
 const { handlebars } = require('hbs');
-const { tr } = require('faker/lib/locales.js');
 app.use(methodOverride('_method'));
 
 
 app.use('/',HomeRouter);
 app.use('/admin',AdminRouter);
 app.use('/admin/posts',PostRouter);
+app.use('/admin/categories',CatagoriesRouter);
 
 
 
