@@ -4,14 +4,8 @@
    </div>
 {{/if}}
 
-{{#if Delete_Message}}
+{{#if error_message}}
    <div class="alert alert-danger">
-      {{Delete_Message}}
-   </div>
-{{/if}}
-
-{{#if Update_Message}}
-   <div class="alert alert-danger">
-      {{Update_Message}}
+      {{error_message}}
    </div>
 {{/if}}

@@ -11,11 +11,13 @@ const upload=require('express-fileupload');
 const {select,generateDate} =require('./helpers/handlebars-helper.js');
 const session=require('express-session');
 const flash=require('connect-flash');
+const {mongoDbUrl}=require('./config/database.js');
+const passport=require('passport');
 
-const port=5000||process.env.port;
+const port=9000||process.env.port;
 app.use(express.static(path.join(__dirname,'/public')));
 
-mongoose.connect("mongodb://localhost:27017/cms").then(()=>
+mongoose.connect(mongoDbUrl).then(()=>
 {
     console.log('Connected')
 }).catch((err)=>
@@ -37,9 +39,14 @@ app.use(session({
     saveUninitialized:true
 }));
 app.use(flash())
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use((req,res,next)=>
 {
     res.locals.Success_Message=req.flash('Success_Message');
+    res.locals.error_message=req.flash('error_message');
+    res.locals.user=req.user;
     next();
 })
 

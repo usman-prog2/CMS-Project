@@ -20,10 +20,20 @@
 
 <div class="form-group">
     <label for="status">Status</label><br>
-    <select id="status" placeholder="Enter Status of the post" name="status" type="text" class="form-control">
+    <select id="status" name="status" type="text" class="form-control">
         <option value="public">Public</option>
         <option value="private">Private</option>
         <option value="draft">Draft</option>
+    </select>
+    <br>
+</div>
+
+<div class="form-group">
+    <label for="status">Category</label><br>
+    <select id="status" name="category" type="text" class="form-control">
+        {{#each categories}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
     </select>
     <br>
 </div>

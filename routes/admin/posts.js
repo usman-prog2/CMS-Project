@@ -1,7 +1,9 @@
 const express=require('express');
 const router=express.Router();
 const posts=require("../../models/postModel.js");
-const {isEmpty}=require('../../helpers/uploadFile-helper.js')
+const Category=require("../../models/categoryModel.js");
+const {isEmpty}=require('../../helpers/uploadFile-helper.js');
+const categoryModel = require('../../models/categoryModel.js');
 //setting default layout
 router.all('/*',(req,res,next)=>
 {
@@ -12,7 +14,9 @@ router.all('/*',(req,res,next)=>
 //displaying all posts
 router.get('/',(req,res)=>
 {
-  posts.find({}).then((posts)=>
+  posts.find({})
+  .populate('category')
+  .then((posts)=>
 {
     res.render('admin/posts/allPosts',{Posts:posts});
 })
@@ -21,7 +25,10 @@ router.get('/',(req,res)=>
 //create post view rendring
 router.get('/create',(req,res)=>
 {
-    res.render('admin/posts/create');
+   Category.find({}).then(categories=>
+   {
+    res.render('admin/posts/create',{categories:categories});
+   })
 })
 
 //edit
@@ -29,7 +36,11 @@ router.get('/edit/:id',(req,res)=>
 {
     posts.findOne({_id: req.params.id}).then((post)=>
     {
-    res.render('admin/posts/edit',{post: post});
+     Category.find({}).then(categories=>
+     {
+        res.render('admin/posts/edit',{post: post,categories:categories});
+     }
+     )
     })
 })
 
@@ -74,7 +85,14 @@ router.post('/create',(req,res)=>
           const newPost=new posts(req.body);
           
           newPost.save().then((post)=>
-        {
+        {   
+            
+            // console.log("test", post.populate('category'))
+            // post.populate('category').then(p => {
+            //     p.category.posts.push(post)
+            //     console.log("cat", p.category);
+            // })
+
            req.flash('Success_Message',`Post '${post.title}' is saved successfully`);
            res.redirect('/admin/posts');
         }).catch((err)=>

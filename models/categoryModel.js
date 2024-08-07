@@ -3,6 +3,12 @@ const schema= mongoose.Schema;
 
 const categorySchema=new schema(
     {
+        posts:
+        [{
+          type:schema.Types.ObjectId,
+          ref:'posts'
+        }],
+
         name:
         {
             type:String,
