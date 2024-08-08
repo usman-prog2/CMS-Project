@@ -47,6 +47,7 @@ app.use((req,res,next)=>
     res.locals.Success_Message=req.flash('Success_Message');
     res.locals.error_message=req.flash('error_message');
     res.locals.user=req.user;
+    res.locals.error=req.flash('error');
     next();
 })
 
@@ -54,6 +55,7 @@ const HomeRouter=require('./routes/home/homeRoutes');
 const AdminRouter=require('./routes/admin/adminRoutes');
 const PostRouter=require('./routes/admin/posts');
 const CatagoriesRouter=require('./routes/admin/catagories');
+const CommentsRouter=require('./routes/admin/comments');
 
 const { handlebars } = require('hbs');
 app.use(methodOverride('_method'));
@@ -63,6 +65,7 @@ app.use('/',HomeRouter);
 app.use('/admin',AdminRouter);
 app.use('/admin/posts',PostRouter);
 app.use('/admin/categories',CatagoriesRouter);
+app.use('/admin/comments',CommentsRouter);
 
 
 

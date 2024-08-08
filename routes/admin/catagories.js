@@ -2,6 +2,8 @@ const express=require('express');
 const router=express.Router();
 const category=require('../../models/categoryModel.js');
 const Post=require('../../models/postModel.js');
+const {userAuthenticated}=require('../../helpers/authentication-helper.js');
+
 
 router.all('/*',(req,res,next)=>
 {

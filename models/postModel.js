@@ -38,7 +38,11 @@ const postSchema=new schema(
         {
             type:Date,
             default:Date.now()
-        }
+        },
+        comments:[{
+            type:schema.Types.ObjectId,
+            ref:'comments'
+        }]
     }
 )
 postSchema.pre('save', async function(next)

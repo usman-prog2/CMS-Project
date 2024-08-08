@@ -4,6 +4,12 @@
    </div>
 {{/if}}
 
+{{#if error}}
+   <div class="alert alert-danger">
+      {{error}}
+   </div>
+{{/if}}
+
 {{#if error_message}}
    <div class="alert alert-danger">
       {{error_message}}

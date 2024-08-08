@@ -4,6 +4,8 @@ const posts=require("../../models/postModel.js");
 const Category=require("../../models/categoryModel.js");
 const {isEmpty}=require('../../helpers/uploadFile-helper.js');
 const categoryModel = require('../../models/categoryModel.js');
+const {userAuthenticated}=require('../../helpers/authentication-helper.js');
+
 //setting default layout
 router.all('/*',(req,res,next)=>
 {
@@ -132,7 +134,7 @@ router.put('/edit/:id',(req,res)=> {
 //deleting a post
 router.delete('/:id',(req,res)=>
 {
-    posts.deleteOne({_id: req.params.id}).
+    posts.deleteOne({_id: req.params.id}).populate('comments').
     then((post)=>
     {
         req.flash('Success_Message',`Post is deleted successfully`);

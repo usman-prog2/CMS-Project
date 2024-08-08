@@ -68,37 +68,22 @@ passport.use(new LocalStrategy({usernameField:'email'},(email,password,done)=>
             }
             else
             {
-              return done(null,false,{message:'email or password is incorrect'});
+              return done(null,false,{message:'password is incorrect'});
             }
         })
     }
     )
 }));
 
-// passport.serializeUser(function(user,done)
-// {
-//     done(null,user.id);
-// })
-// passport.deserializeUser(function(id,done)
-// {
-//    User.findById(id).then(user=>
-//    {
-//      done(user)
-//    }).catch(err=>
-//    {
-//      done(err)
-//    }
-//    )
-// });
+ 
 
-passport.serializeUser(function(user, cb) {
-    //   cb(null, { email:user.email , password: user.password });
-    cb(null, user.id);
+passport.serializeUser(function(user, done) {
+    done(null, user);
   });
   
-passport.deserializeUser(function(user, cb) 
+passport.deserializeUser(function(user, done) 
   {
-    return cb(null, user);
+    return done(null, user);
   });
     
 router.post('/login',(req,res,next)=>
@@ -110,6 +95,14 @@ router.post('/login',(req,res,next)=>
     })(req,res,next);
  }) 
 
+ router.get('/logout',(req,res)=>
+{
+    req.logOut((err)=>
+    {
+        if(err) throw err;
+    })
+    res.redirect('/login');
+})
 router.get('/register',(req,res)=>
     {
         res.render("home/register");
