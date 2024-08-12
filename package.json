@@ -28,8 +28,10 @@
     "method-override": "^3.0.0",
     "moment": "^2.30.1",
     "mongoose": "^8.5.1",
+    "mongoose-url-slugs": "^1.0.2",
     "override": "^0.0.1",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "slugify": "^1.6.6"
   }
 }

@@ -8,7 +8,6 @@ const methodOverride=require('method-override');
 const {allowInsecurePrototypeAccess}=require('@handlebars/allow-prototype-access');
 const Handlebars=require('handlebars');
 const upload=require('express-fileupload');
-const {select,generateDate} =require('./helpers/handlebars-helper.js');
 const session=require('express-session');
 const flash=require('connect-flash');
 const {mongoDbUrl}=require('./config/database.js');
@@ -25,7 +24,8 @@ mongoose.connect(mongoDbUrl).then(()=>
     console.log(err);
 })
 
-app.engine('handlebars', engine({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout:'main', helpers:{Select:select,generateDate:generateDate}}));
+const {select,generateDate,paginate} =require('./helpers/handlebars-helper.js');
+app.engine('handlebars', engine({handlebars:allowInsecurePrototypeAccess(Handlebars),defaultLayout:'main', helpers:{Select:select,generateDate:generateDate,paginate:paginate}}));
 app.set('view engine', 'handlebars');
 
 app.use(upload());

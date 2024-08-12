@@ -39,14 +39,15 @@ const postSchema=new schema(
             type:Date,
             default:Date.now()
         },
-        comments:[{
-            type:schema.Types.ObjectId,
-            ref:'comments'
-        }],   
+       
         user:{
             type:schema.Types.ObjectId,
             ref:'users'
-        }
+        },
+        comments:[{
+            type:schema.Types.ObjectId,
+            ref:'comments'
+        }]   
     }
 )
 postSchema.pre('save', async function(next)
@@ -65,5 +66,7 @@ postSchema.pre('save', async function(next)
   }
   } next();
 });
+
+ //postSchema.plugin(URLSlugs('title',{field:'slug'}));
 
 module.exports=mongoose.model('posts',postSchema);

@@ -22,13 +22,29 @@ router.get('/',(req,res)=>
     // {
     //  console.log(`we found ${req.session.usman}`);
     // }
-    posts.find({}).then((post)=>
+    
+    const perPage=10;
+    const page=req.query.page||1;
+    posts.find({})
+    .skip((perPage*page)-perPage)
+    .limit(perPage)
+    .then((post)=>
     {
-        Category.find({}).then(categories=>
+        posts.countDocuments({}).then(count=>
         {
-            res.render("home/index",{post:post,categories:categories}); 
+            Category.find({}).then(categories=>
+                {
+                    res.render("home/index",{
+                    post:post,
+                    categories:categories,
+                    current:parseInt(page),
+                    pages:Math.ceil(count/perPage)
+                }); 
+                }
+                )
         }
         )
+       
     })
 })
 

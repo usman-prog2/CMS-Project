@@ -1,7 +1,9 @@
 const express=require('express');
 const router=express.Router();
 const Post=require('../../models/postModel.js');
+const Category=require('../../models/categoryModel.js');
 const faker=require('faker');
+const Comment=require('../../models/commentModel.js');
 const {userAuthenticated}=require('../../helpers/authentication-helper.js');
 
 
@@ -14,7 +16,19 @@ router.all('/*',(req,res,next)=>
 
 router.get('/',(req,res)=>
 {
-  res.render('admin/index');
+  Post.countDocuments({}).then(Count=>
+  {
+    Category.countDocuments({}).then(Category=>
+    {
+      Comment.countDocuments({}).then(Comment=>
+      {
+        res.render('admin/index',{count:Count,category:Category,comment:Comment});
+      }
+      )
+    }
+    )
+  }
+  )
 })
 
 router.post('/generate-fake-posts',(req,res)=>
