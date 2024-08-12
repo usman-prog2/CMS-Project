@@ -22,6 +22,7 @@ router.post('/generate-fake-posts',(req,res)=>
   for(let i=0;i<=req.body.amount;i++)
   {
     let posts=new Post({
+      user:req.user._id,
       title:faker.name.title(),
       status:'public',
       allowComments:faker.datatype.boolean(),

@@ -5,6 +5,7 @@ const Category=require('../../models/categoryModel.js');
 const User=require('../../models/userModel.js');
 const bcrypt=require('bcryptjs');
 const passport=require('passport');
+const { model } = require('mongoose');
 const LocalStrategy=require('passport-local').Strategy;
 
 
@@ -33,11 +34,11 @@ router.get('/',(req,res)=>
 
 router.get('/post/:id',(req,res)=>
 {
-    posts.findOne({_id:req.params.id}).then((post)=>
+    posts.findOne({_id:req.params.id}).populate('user').populate({path:'comments',match:{approveComment:true},populate:{path:'user',model:'users'}}).then((post)=>
     {
         Category.find({}).then(categories=>
             {
-                res.render("home/post",{post:post,categories:categories}); 
+                res.render("home/post",{post:post,categories:categories,comments:post.comments,user:post.user}); 
             }
             )
     })

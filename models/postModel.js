@@ -23,7 +23,7 @@ const postSchema=new schema(
         allowComments:
         {
             type:Boolean,
-            required:true
+            default:false
         },
         description:
         {
@@ -42,7 +42,11 @@ const postSchema=new schema(
         comments:[{
             type:schema.Types.ObjectId,
             ref:'comments'
-        }]
+        }],   
+        user:{
+            type:schema.Types.ObjectId,
+            ref:'users'
+        }
     }
 )
 postSchema.pre('save', async function(next)

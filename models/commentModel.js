@@ -11,11 +11,18 @@ const commentSchema=new schema({
         type:String,
         required:true
     },
+    approveComment:
+    {
+      type:Boolean
+    },
     date:{
         type:Date,
         default:Date.now()
     }
 
-});
+},
+{
+    strictPopulate: false
+} );
 
 module.exports=mongoose.model('comments',commentSchema);

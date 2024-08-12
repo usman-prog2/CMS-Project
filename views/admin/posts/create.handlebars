@@ -40,7 +40,7 @@
 
 <div class="form-check">
     <label for="allowComments" class="form-check-label">
-    <input id="allowComments" value="true" name="allowComments" type="checkbox" class="form-check-input">
+    <input id="allowComments" {{#if allowComments}} checked {{/if}} name="allowComments" type="checkbox" class="form-check-input">
           Allow Comments
     </label>
     <br>
@@ -51,5 +51,7 @@
     <textarea id="descreption" cols="20" rows="10" placeholder="Enter Description" name="description" class="form-control" ></textarea>
     <br>
 </div>
+
+   <input type="hidden" value="{{user._id}}" name="user">
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

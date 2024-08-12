@@ -1,6 +1,7 @@
 const express=require('express');
 const router=express.Router();
 const posts=require("../../models/postModel.js");
+const Comment=require("../../models/commentModel.js");
 const Category=require("../../models/categoryModel.js");
 const {isEmpty}=require('../../helpers/uploadFile-helper.js');
 const categoryModel = require('../../models/categoryModel.js');
@@ -23,6 +24,17 @@ router.get('/',(req,res)=>
     res.render('admin/posts/allPosts',{Posts:posts});
 })
 })
+
+//displaying specific user posts
+router.get('/myposts',(req,res)=>
+    {
+      posts.find({user:req.user._id})
+      .populate('category')
+      .then((posts)=>
+    {
+        res.render('admin/posts/myPosts',{Posts:posts});
+    })
+    })
 
 //create post view rendring
 router.get('/create',(req,res)=>
@@ -84,8 +96,7 @@ router.post('/create',(req,res)=>
             
           //console.log(req.body);
           req.body.file=filename;
-          const newPost=new posts(req.body);
-          
+          let newPost=new posts(req.body);
           newPost.save().then((post)=>
         {   
             
@@ -123,7 +134,7 @@ router.put('/edit/:id',(req,res)=> {
     then(()=>
     {
        req.flash('Success_Message',`Post is updated successfully`);
-       res.redirect('/admin/posts');
+       res.redirect('/admin/posts/myposts');
     }).catch(
     (err)=>
     {
@@ -132,13 +143,23 @@ router.put('/edit/:id',(req,res)=> {
 })
 
 //deleting a post
-router.delete('/:id',(req,res)=>
-{
-    posts.deleteOne({_id: req.params.id}).populate('comments').
-    then((post)=>
+router.delete('/:id', async (req, res) => 
     {
-        req.flash('Success_Message',`Post is deleted successfully`);
-        res.redirect('/admin/posts');
-    })
-})
+    const postId = req.params.id;
+      const post = await posts.findById(postId).populate('comments');
+      if (!post) {
+        return res.status(404).send('Post not found');
+      }
+
+      if (post.comments.length > 0) {
+        const commentIds = post.comments.map(comment => comment._id);
+        await Comment.deleteMany({ _id: { $in: commentIds } });
+      }
+
+      await posts.findByIdAndDelete(postId);
+      req.flash('Success_Message', 'Post and associated comments deleted successfully');
+      res.redirect('/admin/posts/myposts');
+    
+    }
+  );
 module.exports=router;

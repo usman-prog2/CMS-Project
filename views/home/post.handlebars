@@ -11,7 +11,7 @@
           <!-- Author -->
           <p class="lead">
             by
-            <a href="#">User</a>
+            <a href="#">{{user.firstName}}</a>
           </p>
 
           <hr>
@@ -43,15 +43,19 @@
           </div>
 
           <!-- Single Comment -->
+          {{#each comments}}
           <div class="media mb-4">
             <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
             <div class="media-body">
-              <h5 class="mt-0">Commenter Name</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+              <h4 class="mt-0">{{user.firstName}}</h4>
+               {{body}}
+               <br>
+               <b>Posted on:{{generateDate date 'MMMM Do YYYY'}}</b>
             </div>
           </div>
+          {{/each}}
 
-          <!-- Comment with nested comments -->
+          {{!-- <!-- Comment with nested comments -->
           <div class="media mb-4">
             <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
             <div class="media-body">
@@ -75,7 +79,7 @@
               </div>
 
             </div>
-          </div>
+          </div> --}}
 
         </div>
           {{> home/category-sidebar}}
