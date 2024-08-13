@@ -2,8 +2,9 @@ const express=require('express');
 const router=express.Router();
 const Post=require('../../models/postModel.js');
 const Comment=require('../../models/commentModel.js');
+const { userAuthenticated } = require('../../helpers/authentication-helper.js');
 
-router.all('/*',(req,res,next)=>
+router.all('/*',userAuthenticated,(req,res,next)=>
 {
     req.app.locals.layout='admin';
     next();

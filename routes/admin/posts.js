@@ -67,11 +67,7 @@ router.post('/create',(req,res)=>
         {
             errors.push({message:"Please add title"});
         }
-
-        if(!req.body.allowComments)
-        {
-            errors.push({message:"AllowComments are required"});
-        }
+ 
         
         if(!req.body.description)
         {

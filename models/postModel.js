@@ -67,6 +67,4 @@ postSchema.pre('save', async function(next)
   } next();
 });
 
- //postSchema.plugin(URLSlugs('title',{field:'slug'}));
-
 module.exports=mongoose.model('posts',postSchema);

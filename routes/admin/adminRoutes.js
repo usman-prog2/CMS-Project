@@ -7,7 +7,7 @@ const Comment=require('../../models/commentModel.js');
 const {userAuthenticated}=require('../../helpers/authentication-helper.js');
 
 
-router.all('/*',(req,res,next)=>
+router.all('/*',userAuthenticated,(req,res,next)=>
 {
   req.app.locals.layout='admin';
   next();
@@ -16,19 +16,31 @@ router.all('/*',(req,res,next)=>
 
 router.get('/',(req,res)=>
 {
-  Post.countDocuments({}).then(Count=>
+  const promises=[
+    Post.countDocuments().exec(),
+    Category.countDocuments().exec(),
+    Comment.countDocuments().exec(),
+  ];
+
+  Promise.all(promises).then(([postCount,categoryCount,commentCount])=>
   {
-    Category.countDocuments({}).then(Category=>
-    {
-      Comment.countDocuments({}).then(Comment=>
-      {
-        res.render('admin/index',{count:Count,category:Category,comment:Comment});
-      }
-      )
-    }
-    )
+    res.render('admin/index',{postCount:postCount,categoryCount:categoryCount,commentCount:commentCount});
   }
   )
+
+  // Post.countDocuments({}).then(Count=>
+  // {
+  //   Category.countDocuments({}).then(Category=>
+  //   {
+  //     Comment.countDocuments({}).then(Comment=>
+  //     {
+  //       res.render('admin/index',{count:Count,category:Category,comment:Comment});
+  //     }
+  //     )
+  //   }
+  //   )
+  // }
+  // )
 })
 
 router.post('/generate-fake-posts',(req,res)=>
